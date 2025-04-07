@@ -36,17 +36,8 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
 
-    - name: Minecraft Tests
-      # You may pin to the exact commit or the version.
-      # uses: Geometrically/fabric-test-runner@e70d7f1c4d443482e9c085f9dde33bd821a09d94
-      uses: Geometrically/fabric-test-runner@v1
-      with:
-        # Minecraft Version to run tests on, currently supports
-        minecraftVersion: 1.20.1# default is latest
-        # Whether the action should run the build test
-        runBuildTest: # optional, default is true
-        # Whether the action should run the server test. Useful for client only mods.
-        runServerTest: # optional, default is true
+    - name: Run Game Test Server
+      run: ./gradlew runGameTestServer
           
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
