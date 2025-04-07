@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.ctrwaz.repother.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "repother.refmap.json",
+  "mixins": [
+    "NewRepotherTick"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
