@@ -1,6 +1,8 @@
 package org.ctrwaz.repother.mixin;
 
-import net.minecraftforge.fml.ModList;
+import net.mehvahdjukaar.supplementaries.Supplementaries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -10,6 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class MixinPlugin implements IMixinConfigPlugin {
+    private static final Logger LOGGER = LogManager.getLogger("ConditionalMixinPlugin");
+
     @Override
     public void onLoad(String mixinPackage) {
 
@@ -23,7 +27,9 @@ public class MixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (Objects.equals(mixinClassName, "org.ctrwaz.repother.mixin.DustPrecipitationMixin")) {
-            return isClassExists("net.mehvahdjukaar.supplementaries");
+            boolean exists = isClassExists("net.mehvahdjukaar.supplementaries.Supplementaries");
+            LOGGER.info("[critical]Checking class net.mehvahdjukaar.supplementaries.Supplementaries: exists={}", exists);
+            return exists;
         } else {
             return true;
         }

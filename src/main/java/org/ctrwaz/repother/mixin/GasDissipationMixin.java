@@ -32,14 +32,11 @@ public abstract class GasDissipationMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand, CallbackInfo ci) {
         Block gasBlock = state.getBlock();
-        LOGGER.info("[repother-debug]random tick hit, inspecting pollutant block at:{} {} {} |{}", pos.getX(), pos.getY(), pos.getZ(), gasBlock.getName());
         if (gasDissipation) {
             if (dissipablePollutants.contains(gasBlock.asItem())) {
                 if (state.getValue(DENSITY) == Density.LIGHT && pos.getY() == this.getConcentrationAltitudeIn(BiomeId.from(level, pos))) {
-                    LOGGER.info("[repother-debug]gas pollutant satisfies elimination condition, checking if it's the lucky one");
                     if (rand.nextInt(100) < chanceOfDissipation) {
                         level.removeBlock(pos, true);
-                        LOGGER.info("[repother-debug]pollutant eliminated");
                         return;
                     }
                 }
