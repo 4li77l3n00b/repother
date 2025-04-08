@@ -21,8 +21,6 @@ public class Repother {
     private static final Logger LOGGER = LogUtils.getLogger();
     // Create a Deferred Register to hold Blocks which will all be registered under the "repother" namespace
 
-    public boolean enablePrecipitation;
-
     public Repother() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -32,8 +30,6 @@ public class Repother {
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        enablePrecipitation = ModList.get().isLoaded("supplementaries");
-
 
     }
 }
