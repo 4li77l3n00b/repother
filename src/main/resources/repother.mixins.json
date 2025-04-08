@@ -5,11 +5,13 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "repother.refmap.json",
   "mixins": [
-    "NewRepotherTick"
+    "GasDissipationMixin",
+    "DustPrecipitationMixin"
   ],
   "client": [
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "plugin": "org.ctrwaz.repother.mixin.MixinPlugin"
 }
