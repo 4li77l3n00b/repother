@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:is_water",
+    "#forge:is_swamp",
+    "#minecraft:is_beach"
+  ]
+}
