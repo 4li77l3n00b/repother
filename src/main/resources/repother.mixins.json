@@ -5,8 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "repother.refmap.json",
   "mixins": [
+    "DustPrecipitationMixin",
     "GasDissipationMixin",
-    "DustPrecipitationMixin"
+    "WaterRefreshingMixin"
   ],
   "client": [
   ],

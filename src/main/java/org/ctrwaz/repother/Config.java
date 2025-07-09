@@ -2,13 +2,14 @@ package org.ctrwaz.repother;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,6 +30,10 @@ public class Config {
 
     private static final ForgeConfigSpec.IntValue CHANCE_OF_PRECIPITATION = BUILDER.comment(" - Chance of generating dust").defineInRange("chanceOfPrecipitation", 10, 0, 100);
 
+    private static final ForgeConfigSpec.BooleanValue WATER_REFRESHING = BUILDER.comment("Enable Water Refreshing").define("waterRefreshing", true);
+
+    private static final ForgeConfigSpec.IntValue CHANCE_OF_REFRESHING = BUILDER.comment(" - Chance of polluted water self-refreshing").defineInRange("chanceOfRefreshing", 100, 0, 100);
+
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
     public static Boolean gasDissipation;
@@ -43,8 +48,42 @@ public class Config {
 
     public static int chanceOfPrecipitation;
 
+    public static Boolean waterRefreshing;
+
+    public static int chanceOfRefreshing;
+
     private static boolean validateItemName(final Object obj) {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
+        if (!(obj instanceof final String itemName))
+            return false;
+        try {
+            ResourceLocation itemId = new ResourceLocation(itemName);
+
+            Block block = Block.byItem(ForgeRegistries.ITEMS.getValue(itemId));
+            if (block == null || block == net.minecraft.world.level.block.Blocks.AIR) {
+                System.err.println("Config warning: Pollutant '" + itemName + "' does not exist.");
+                return false;
+            }
+
+            if (ModList.get().isLoaded("adpother")) {
+                try {
+                    Class<?> targetBaseClass = Class.forName("com.endertech.minecraft.mods.adpother.blocks.AbstractGas");
+
+                    if (!targetBaseClass.isAssignableFrom(block.getClass())) {
+                        System.err.println("Config validation error: Pollutant '" + itemName + "' is not found in AdPother.");
+                        return false;
+                    }
+                } catch (ClassNotFoundException e) {
+                    System.err.println("Could not find class 'com.endertech.minecraft.mods.adpother.blocks.AbstractGas' even though 'adpother' is loaded.");
+                    return true;
+                }
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            System.err.println("Config error: Invalid block ID format '" + itemName + "'.");
+            return false;
+        }
     }
 
     @SubscribeEvent
@@ -55,5 +94,7 @@ public class Config {
         dustPrecipitation = DUST_PRECIPITATION.get();
         precipitablePollutants = PRECIPITABLE_POLLUTANTS.get().stream().map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).collect(Collectors.toSet());
         chanceOfPrecipitation = CHANCE_OF_PRECIPITATION.get();
+        waterRefreshing = WATER_REFRESHING.get();
+        chanceOfRefreshing = CHANCE_OF_REFRESHING.get();
     }
 }
