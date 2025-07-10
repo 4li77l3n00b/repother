@@ -13,6 +13,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "plugin": "org.ctrwaz.repother.mixin.MixinPlugin"
+  }
 }

@@ -29,7 +29,7 @@ public abstract class GasDissipationMixin {
 
     @Unique
     private static final Logger LOGGER = LoggerFactory.getLogger("Repother");
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void onTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand, CallbackInfo ci) {
         Block gasBlock = state.getBlock();
         if (gasDissipation) {
@@ -37,7 +37,7 @@ public abstract class GasDissipationMixin {
                 if (state.getValue(DENSITY) == Density.LIGHT && pos.getY() == this.getConcentrationAltitudeIn(BiomeId.from(level, pos))) {
                     if (rand.nextInt(100) < chanceOfDissipation) {
                         level.removeBlock(pos, true);
-                        return;
+                        ci.cancel();
                     }
                 }
             }

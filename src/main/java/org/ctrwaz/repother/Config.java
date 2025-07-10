@@ -2,6 +2,7 @@ package org.ctrwaz.repother;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -10,7 +11,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,8 @@ public class Config {
 
     private static final ForgeConfigSpec.IntValue CHANCE_OF_PRECIPITATION = BUILDER.comment(" - Chance of generating dust").defineInRange("chanceOfPrecipitation", 10, 0, 100);
 
+    private static final ForgeConfigSpec.IntValue CHANCE_OF_RAINWASH = BUILDER.comment(" - Chance of dust being washed away when raining").defineInRange("chanceOfRainWashing", 10, 0, 100);
+
     private static final ForgeConfigSpec.BooleanValue WATER_REFRESHING = BUILDER.comment("Enable Water Refreshing").define("waterRefreshing", true);
 
     private static final ForgeConfigSpec.IntValue CHANCE_OF_REFRESHING = BUILDER.comment(" - Chance of polluted water self-refreshing").defineInRange("chanceOfRefreshing", 10, 0, 100);
@@ -47,6 +52,8 @@ public class Config {
     public static Set<Item> precipitablePollutants;
 
     public static int chanceOfPrecipitation;
+
+    public static int chanceOfRainWashing;
 
     public static Boolean waterRefreshing;
 
@@ -94,6 +101,7 @@ public class Config {
         dustPrecipitation = DUST_PRECIPITATION.get();
         precipitablePollutants = PRECIPITABLE_POLLUTANTS.get().stream().map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName))).collect(Collectors.toSet());
         chanceOfPrecipitation = CHANCE_OF_PRECIPITATION.get();
+        chanceOfRainWashing = CHANCE_OF_RAINWASH.get();
         waterRefreshing = WATER_REFRESHING.get();
         chanceOfRefreshing = CHANCE_OF_REFRESHING.get();
     }
